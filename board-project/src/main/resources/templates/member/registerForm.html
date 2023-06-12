@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>회원가입</title>
+</head>
+<style>
+    header{
+        text-align: center;
+    }
+
+    h1> a{
+        color: #2ECC71;
+        font-weight: 800;
+        font-size: 50px;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-top: 50px;
+        text-decoration: none;
+    }
+
+    h1 > a:hover {
+        color: #5dcf8c;
+        font-weight: 800;
+        font-size: 50px;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-top: 50px;
+        text-decoration: none;
+    }
+
+    main{
+        text-align: center;
+    }
+    
+    #idCheckView{
+    	position: absolute;
+        top: 170px;
+        right: 9%;
+    }
+
+	#passwordCheckView{
+    	position: absolute;
+        top: 452px;
+        right: 10%;
+    }
+
+    p{
+        font-size: 14px;
+        font-weight: 800;
+        margin-bottom: 5px;
+        margin-top: 40px;
+        text-align: left;
+        margin-left: 382px;
+    }
+    input {
+        width: 680px;
+        height: 50px;
+    }
+
+    button{
+        font-size: 18px;
+        padding: 15px 305px;
+        border: none;
+        background-color: #2ECC71;
+        color: #fff;
+        font-weight: 800;
+        margin-top: 40px;
+    }
+
+    button[type=reset]{
+        font-size: 18px;
+        padding: 15px 296px;
+        border: none;
+        background-color: #fa5656;
+        color: #fff;
+        font-weight: 800;
+        margin-top: 40px;
+        margin-bottom: 100px;
+    }
+</style>
+<body>
+    <header>
+        <h1><a href="" th:href="@{/}">Naver cafe</a></h1>
+    </header>
+
+    <main>
+        <div layout:fragment="content" class="container">
+            <form method="post"  action="/guest/registerMember" th:action="@{/guest/registerMember}" id="regForm">
+                <p>아이디</p>
+                <input type="text" name="id" id="memberId" placeholder="아이디" size="42"><span id="idCheckView"></span><br><br>
+                <p>비밀번호</p>
+                <input type="password" name="password" id="memberPassword" placeholder="비밀번호" required="required" size="42"><br><br>
+                <p>비밀번호 재확인</p>
+                <input type="password" name="passwordCheck" id="memberPasswordCheck" placeholder="비밀번호확인" required="required" size="42"><span id="passwordCheckView"></span><br><br>
+                <p>이름</p>
+                <input type="text" name="name" placeholder="이름"  required="required" size="42"><br><br>
+                <p>주소</p>
+                <input type="text" name="address" placeholder="주소"  required="required" size="42"><br><br>
+                <p>생년월일</p>
+                <input type="text" name="birth" placeholder="생년월일(8자)---ex)19891010" required="required"size="42"><br><br>
+                <button type="submit">가입하기</button><br>
+                <button type="reset">초기화하기</button>
+            </form>
+        </div>
+    </main>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+        let checkResultId="";		
+        let checkResultPassword="";
+        $("#regForm").submit(function(){
+            if(checkResultId==""){
+                alert("중복된 아이디가 존재합니다.");
+                return false;
+            }
+            if(checkResultPassword==""){
+                alert("비밀번호를 다시 확인하세요");
+                return false;
+            }
+        });
+
+        $("#regForm :input[name=passwordCheck]").keyup(function() {
+            let password = $("#memberPassword").val().trim();
+            if(password!=$(this).val()){
+                $("#passwordCheckView").html("비밀번호가 일치하지 않습니다.").css("color","red");
+                checkResultPassword="";
+            }else{
+               $("#passwordCheckView").html("비밀번호가 일치합니다.").css("color","green");
+                checkResultPassword=password;
+            }
+            if($(this).val()==""){
+                $("#passwordCheckView").text("");
+            }
+        });
+
+        $("#regForm :input[name=password]").keyup(function() {
+            let password = $("#memberPasswordCheck").val();
+            if(password!=""){
+                if(password!=$(this).val()){
+                    $("#passwordCheckView").html("비밀번호가 일치하지 않습니다.").css("color","red");
+                    checkResultPassword="";
+                }else{
+                    $("#passwordCheckView").html("비밀번호가 일치합니다.").css("color","green");
+                    checkResultPassword=password;
+                }
+            }
+            if($(this).val()==""){
+                $("#passwordCheckView").text("");
+            }
+        });
+
+        $("#regForm :input[name=id]").keyup(function(){
+            let id=$(this).val().trim();
+            if(id.length<0){
+                $("#idCheckView").text("");
+            }
+            if(id.length<4 || id.length>10){
+                if(id.length<1){
+                    $("#idCheckView").html("");					
+                }else{
+                    $("#idCheckView").html("4자이상 10자 이하로 입력하세요.").css("color","red");
+                }
+                checkResultId="";
+                return;
+            }
+            $.ajax({
+                type:"get",
+                url:"/guest/idcheckAjax",				
+                data:"id="+id,	
+                success:function(data){						
+                    if(data=="fail"){
+                    $("#idCheckView").html("사용 불가능한 아이디입니다.").css("color","red");
+                        checkResultId="";
+                    }else{						
+                        $("#idCheckView").html("사용 가능한 아이디입니다.").css("color","green");		
+                        checkResultId=id;
+                    }					
+                }//callback			
+            });//ajax
+        });//keyup
+
+        $("#regForm :input[type=reset]").click(function() {
+            $("#passwordCheckView").text("");
+            $("#idCheckView").text("");
+        });
+
+    });//ready 
+</script>
+</html>

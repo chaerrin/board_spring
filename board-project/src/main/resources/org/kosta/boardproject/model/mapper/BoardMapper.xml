@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosta.boardproject.model.mapper.BoardMapper">
+	<sql id="boardSelect">
+		select row_number() over(ORDER BY board_no asc) as rnum, board_no, board_title, board_content, board_time, hits, cs_id from board
+	</sql>
+	
+	<select id="getTotalBoardCount" resultType="int">
+		select count(*) from board
+	</select>
+	
+	<select id="findBoardAllList" resultType="org.kosta.boardproject.model.vo.BoardVO" parameterType="org.kosta.boardproject.model.vo.Pagination">
+		SELECT rnum,board_no,board_title,board_content,board_time, hits
+		FROM(
+		SELECT ROW_NUMBER() OVER(ORDER BY board_no DESC) AS rnum, board_no, board_title, board_content, board_time, hits
+		FROM board
+		)
+		WHERE rnum BETWEEN #{startRowNumber} AND #{endRowNumber}
+	</select>
+	
+	
+	<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	
+	<select id="getTotalBoardById" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM board WHERE cs_id=#{value}
+	</select>
+	
+	<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	
+	
+	
+	
+	
+	<select id="boardDetail" resultType="org.kosta.boardproject.model.vo.BoardVO" parameterType="int">
+		<include refid="boardSelect"></include>
+		where board_no = #{value}
+	</select>
+	
+	<update id="boardUpdate" parameterType="org.kosta.boardproject.model.vo.BoardVO">
+		update board set board_title=#{boardTitle}, board_content=#{boardContent} where board_No = #{boardNo}
+	</update>
+	
+	<insert id="registerBoard" parameterType="org.kosta.boardproject.model.vo.BoardVO">
+		<!-- insert into board(board_no,board_title, board_content, board_time) values (board_seq.nextval,#{boardTitle},#{boardContent},sysdate) -->
+		<!-- insert into board values(board_seq.nextval,#{board_title},#{board_content},sysdate,0) -->
+		insert into board (board_no
+                          ,board_title
+                          ,board_content
+                          ,board_time
+                          ,hits
+                          ,cs_id
+                          )
+              values ( board_seq.nextval
+                      ,#{boardTitle}
+                      ,#{boardContent}
+                      ,sysdate
+                      ,0
+                      ,#{csId}
+                      )
+	</insert>
+	
+	<delete id="deleteBoard" parameterType="int">
+		delete from board where board_no = #{value}
+	</delete>
+	
+	<update id="boardHitsCount" parameterType="int">
+		update board set hits=hits+1 where board_no = #{value}
+	</update>
+	
+</mapper>

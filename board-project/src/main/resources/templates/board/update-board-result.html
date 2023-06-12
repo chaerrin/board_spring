@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+> <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정   */-->
+<head>
+   <title>update-board-result</title>
+</head>
+
+   <div layout:fragment="content" class="container">
+		<script type="text/javascript">
+		alert("수정이 완료되었습니다");
+		location.href="/";
+		</script>
+   </div>
+
+</html>

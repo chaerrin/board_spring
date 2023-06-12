@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+><!--/* 위  선언은 타임리프 레이아웃을 사용하기 위한 설정   */-->
+<head>
+<title>board-detail</title>
+</head>
+
+<div layout:fragment="content" class="container">
+
+	<h4>자신이 원하는 내용을 자유롭게 남겨주세요!</h4>
+	<div style="border-top:solid; padding: 20px;" class="row">
+		<div  class="col-2" th:text="'글 번호 : '+${boardDetail.boardNo}" align="center">글 번호</div>
+		<div class="col-5" th:text=" '글 제목 : '+ ${boardDetail.boardTitle}" align="center">글 제목</div>
+		<div class="col-3" th:text="'작성 일 : '+ ${boardDetail.boardTime}" align="center">작성 일</div>
+		<div class="col-2" th:text="'조회 수 : '+ ${boardDetail.hits}">조회 수</div>
+	</div>
+	<div style="width:100%; height:423px; border:1px solid #000; margin-bottom:30px">
+		<textarea class="row" th:utext="${boardDetail.boardContent}" cols="146" rows="14" style=" border:0px; padding: 20px; margin:0 0"></textarea><br>	
+	</div>
+	
+	<!-- <p th:text="${#authentication.principal.id}"></p> -->
+	<!-- <p th:text="${boardDetail}"></p> -->
+	<div align="center">
+		<form action="" method="post" th:action="@{/boardDelete}">
+			<input type="hidden" th:value="${boardDetail.boardNo}" name="boardNo">
+			<!-- <c:if test="${loginUserBean.user_idx == contentBean.content_writer_idx }"> -->
+				<button th:if="${#authentication.principal.id} == ${boardDetail.csId}" type="button" id="updateBtn" class="btn btn-outline-success" style="width: 100px">수정하기</button>&nbsp;&nbsp;
+				<button type="button" id="Btn" class="btn btn-outline-success" style="width: 100px" onclick="location.href='/'">목록</button>&nbsp;&nbsp;
+				<button th:if="${#authentication.principal.id} == ${boardDetail.csId}" type="submit" id="deleteBtn" class="btn btn-outline-success" style="width: 100px">삭제하기</button>			
+			<!-- </c:if> -->
+		</form>
+	</div>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#updateBtn").click(function() {
+				let boardNo = $(this).prev().val();
+				location.href="boardUpdateForm?No="+boardNo;
+			});
+			
+			$("#deleteBtn").click(function() {
+				let message = confirm("정말로 삭제하시겠습니까?");
+				if(message==false){
+					return false;
+				}
+			})
+		});
+	</script>
+	
+</div>
+</html>

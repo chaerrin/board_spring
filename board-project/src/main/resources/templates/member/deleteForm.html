@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+> <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정   */-->
+<head>
+	<title>회원탈퇴(비밀번호확인)</title>
+</head>
+
+	<div layout:fragment="content" class="container">
+		<div class="row">
+			<div class="col-md-4 offset-md-4">
+				<h2>비밀번호확인</h2>
+				<form method="post" th:action="@{/deleteMemberAction}" id="passwordCheckForm">
+					<span style="display: inline-block; width: 70px">패스워드</span><input type="password" name="password" required="required" size="30"><br><br>
+					<button type="button" id="passwordCheckBtn" class="btn btn-danger btn-block">회원탈퇴</button>
+				</form>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#passwordCheckBtn").click(function() {
+					let password = $("#passwordCheckForm :input[name=password]");
+					$.ajax({
+						type:"get",
+						url:"/passwordcheckAjax",
+						data:"password="+password.val(),
+						success:function(result){
+							if(result=="ok"){
+								$("#passwordCheckForm").submit();
+							}else{
+								alert("비밀번호가 일치하지 않습니다");
+								password.val("").focus();
+							}
+						}
+					});
+				});
+			});
+		</script>
+	</div>
+
+</html>

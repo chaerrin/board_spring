@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+> <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정   */-->
+<head>
+	<title>accessDeniedView</title>
+</head>
+
+	<div layout:fragment="content" class="container">
+		<!--//  권한이 없을 때 보여주는 페이지  //-->
+		<script type="text/javascript">
+			alert("서비스에 접근할 권한이 없습니다");
+			location.replace("/");
+		</script>
+	</div>
+
+</html>

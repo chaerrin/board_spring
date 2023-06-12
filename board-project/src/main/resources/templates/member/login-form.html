@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<style>
+    h1 > a {
+        color: #2ECC71;
+        font-weight: 800;
+        font-size: 50px;
+        font-family: Arial, Helvetica, sans-serif;
+        padding-top: 50px;
+        margin-left: 39%;
+        text-decoration: none;
+    }
+
+    h1 > a:hover {
+        color: #5dcf8c;
+        font-weight: 800;
+        font-size: 50px;
+        font-family: Arial, Helvetica, sans-serif;
+        /* text-align: center; */
+        margin-top: 50px;
+        text-decoration: none;
+    }
+
+    .form{
+        width: 600px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        padding: 50px;
+        margin: 0 auto;
+    }
+
+    input{
+        width: 545px;
+        height: 50px;
+        margin-bottom: 22px;
+        margin-left: 15px;
+    }
+
+    button{
+        font-size: 22px;
+        padding: 10px 245px;
+        border: none;
+        background-color: #2ECC71;
+        color: #fff;
+        font-weight: 800;
+        margin-left: 15px;
+    } 
+    
+    a{
+        color: #BEBEBE;
+        margin-left: 47.4%;
+    }
+
+    a:hover{
+        color: #a9a9a9;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    
+    .aa {
+    	display:flex;
+    	margin-left: 25%;
+    }
+    
+    .aa > span {
+    	width: 300px;
+    }
+</style>
+<body>
+    <header>
+        <h1><a href="" th:href="@{/}">Naver cafe</a></h1>
+    </header>
+
+    <main>
+        <div layout:fragment="content" class="container">
+            <div class="form">
+                <form th:action="@{/login}"   action="/login" method="post" id="loginForm">	
+                    <input type="text" name="id" size="42" placeholder="아이디" required="required"><br><br>
+                    <input type="password" name="password" size="42" placeholder="비밀번호" required="required"><br><br>
+                    <button type="submit" class="btn btn-success btn-block">로그인</button>
+                </form>
+            </div>
+            <br>
+            <div class="aa">
+	            <span><a href="#" th:href="@{/guest/registerForm}">회원가입</a></span>
+	            <span><a href="#" th:href="@{/guest/findMemberIdAndPasswordForm}">아이디/비밀번호 찾기</a></span>            
+            </div>
+        </div>
+    </main>
+</body>
+</html>

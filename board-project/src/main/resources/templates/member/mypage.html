@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+> <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정   */-->
+<head>
+	<title>MyPage</title>
+</head>
+
+	<div layout:fragment="content" class="container">
+		<div class="row">
+		  <div class="col-md-4 offset-md-4">
+		  	<h2>회원정보</h2>
+			<span style="display: inline-block; width: 100px; height: 30px">ID</span><span style="display: inline-block; width: 100px; height: 30px" sec:authentication="principal.id">아이디</span><br>
+			<span style="display: inline-block; width: 100px; height: 30px">NAME</span><span style="display: inline-block; width: 100px; height: 30px" sec:authentication="principal.name">이름</span><br>
+			<span style="display: inline-block; width: 100px; height: 30px">ADDRESS</span><span style="display: inline-block; width: 100px; height: 30px" sec:authentication="principal.address">주소</span><br>
+			<span style="display: inline-block; width: 100px; height: 30px">BIRTH</span><span style="display: inline-block; width: 100px; height: 30px" sec:authentication="principal.birth">생년월일</span><br>
+			<span style="float: right"><a href="#" th:href="@{/updateForm}">회원정보수정</a></span>	
+		  </div>
+		</div>
+  	</div>
+</html>

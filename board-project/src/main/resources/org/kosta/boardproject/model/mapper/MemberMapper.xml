@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosta.boardproject.model.mapper.MemberMapper">
+
+ 	<sql id="selectMember">
+ 		select id,password,name,address,birth from member
+ 	</sql>
+ 	
+ 	<select id="getAddressList" resultType="string">
+ 		select distinct address from member
+ 	</select>
+ 	
+ 	<select id="findMemberListByAddress" resultType="org.kosta.boardproject.model.vo.MemberVO">
+ 		select id,name from member
+ 		where address=#{value}
+ 	</select>
+
+ 	<select id="getMemberCount" resultType="int">
+ 		select count(*) from member
+ 	</select>
+ 	
+ 	<update id="updateMember" parameterType="org.kosta.boardproject.model.vo.MemberVO">
+		update member set password=#{password},name=#{name},address=#{address},birth=#{birth}
+		where id=#{id}
+	</update>
+	
+	<insert id="registerMember" parameterType="org.kosta.boardproject.model.vo.MemberVO">
+		insert into member(id,password,name,address,birth)
+		values(#{id},#{password},#{name},#{address},#{birth})
+	</insert>
+	
+	<select id="idcheck" resultType="int">
+		select count(*) from member where id=#{value}
+	</select>
+
+	<insert id="registerRole" parameterType="org.kosta.boardproject.model.vo.Authority">
+		insert into authorities(id,authority) values(#{id},#{authority})
+	</insert>
+	
+	<!-- 
+		Spring Security에서 로그인 인증시 사용 : 
+	     사용가능한(enabled 1) 계정일 경우만 조회. 
+	 -->
+	<select id="findMemberById" resultType="org.kosta.boardproject.model.vo.MemberVO">
+ 		SELECT	id, 	password,name, address, birth, enabled
+		FROM	member
+		WHERE 	id=#{value}	
+		AND		enabled=1 		
+ 	</select>
+ 	
+	<!-- Spring Security에서 권한 체크를 위해 사용 -->
+	<select id="findAuthorityById"  resultType="org.kosta.boardproject.model.vo.Authority">
+		SELECT	id,authority
+		FROM	authorities
+		WHERE	id=#{id}
+	</select>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE member SET enabled=0 WHERE id=#{value}
+	</update>
+	
+	<select id="findMemberId" parameterType="org.kosta.boardproject.model.vo.MemberVO" resultType="string">
+		SELECT id FROM member WHERE name=#{name} AND birth=#{birth} AND enabled=1
+	</select>
+	
+	<select id="findMemberPassword" parameterType="org.kosta.boardproject.model.vo.MemberVO" resultType="int">
+		SELECT COUNT(*) FROM member WHERE id=#{id} AND name=#{name} AND birth=#{birth} AND enabled=1
+	</select>
+	
+	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	<select id="getTotalMemberById" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM member WHERE id=#{value}
+	</select>
+	
+	
+	<select id="findMemberListByIdPagination" parameterType="map" resultType="map">
+		SELECT id,password,name,address,birth
+		FROM member
+		WHERE id=#{ID}
+	</select>
+	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	
+</mapper>

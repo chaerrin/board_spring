@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+> <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정   */-->
+<head>
+	<title>회원탈퇴결과</title>
+</head>
+
+	<div layout:fragment="content" class="container">
+		<form id="logoutForm" th:action="@{/logout}" method="post" style="display: none"></form>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				alert("회원탈퇴가 완료되었습니다");
+				$("#logoutForm").submit();
+			});
+		</script>
+	</div>
+
+</html>

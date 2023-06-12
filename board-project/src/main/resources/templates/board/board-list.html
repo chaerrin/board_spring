@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+> <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정   */-->
+<head>
+	<title>board-list</title>
+</head>
+	<div layout:fragment="content" class="container">
+	<h4>자신이 원하는 내용을 자유롭게 남겨주세요!</h4>
+		<table class="table table-boardered">
+			<thead>
+			<tr>
+				<th>번호</th>
+				<th>제목</th>
+				<th>작성일자</th>
+				<th>조회 수</th>
+			</tr>
+			</thead>
+			<tbody>
+				<tr th:each="board:${boardAllList}">
+					<td th:text="${board.boardNo}" class = "col-sm-2" name="boardNo"></td>
+					<td id="${board.boardNo}" class="col-sm-5"><a th:href="@{boardDetail?No=}+${board.boardNo}" th:text="${board.boardTitle}"></a></td>
+					<td th:text="${board.boardTime}" class = "col-sm-3"></td>
+					<td th:text="${board.hits}" class = "col-sm-2"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<button style="float: right;" onclick="location.href='boardWriteForm'" class="btn btn-outline-success">글 작성</button>
+		
+		<!--/* pagination 부분 */-->
+		<th:block th:if="${pagination}!=null">
+		<div class="row mt-5">
+          <div class="col text-center">
+            <div class="block-27">
+              <ul>
+               		<li th:if=${pagination.previousPageGroup}><a href="#" th:href="@{/board(pageNo=${pagination.startPageOfPageGroup-1})}">&lt;</a></li>
+            		<th:block th:each="pageNo : ${#numbers.sequence(pagination.startPageOfPageGroup,pagination.endPageOfPageGroup)}">
+						<li th:if="${pageNo==pagination.nowPage}" class="active"><a href="#" th:href="@{/board(pageNo=${pageNo})}" th:text="${pageNo}">pageNo</a></li>
+						<li th:unless="${pageNo==pagination.nowPage}"><a href="#" th:href="@{/board(pageNo=${pageNo})}" th:text="${pageNo}">pageNo</a></li>
+            		</th:block>
+            		<li th:if="${pagination.nextPageGroup}"><a href="#" th:href="@{/board(pageNo=${pagination.endPageOfPageGroup+1})}">&gt;</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        </th:block>
+        <!--/* pagination 부분 */-->
+        
+	</div>
+</html>

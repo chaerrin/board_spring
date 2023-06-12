@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--/* 
+		필요한 html 요소만 정의한다 		 
+		th:fragment="headerFragment" 는 반드시 명시하도록 한다 
+ */-->
+     <nav th:fragment="headerFragment" class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="" th:href="@{/}">NAVER cafe 자유게시판</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	        	<th:block sec:authorize="isAuthenticated()">
+	        		<li class="nav-item"><span class="nav-link" sec:authentication="principal.name" id="name" style="color: green; font-weight: bolder;">이름</span></li>
+	        	</th:block>
+	        	<li class="nav-item active"><a href="#" th:href="@{/}" class="nav-link">Home</a></li>
+	        	<th:block sec:authorize="isAuthenticated()">
+		        	<li class="nav-item"><a href="#" th:href="@{/mypage}" class="nav-link">MyPage</a></li>
+	        	</th:block>
+	        	<li class="nav-item"><a href="#" th:href="@{/loginForm}" class="nav-link" sec:authorize="isAuthenticated()==false">Login</a></li>
+	        	<th:block sec:authorize="isAuthenticated()">
+	        		<li class="nav-item"><a href="#" id="logoutAction" class="nav-link">Logout</a></li>
+		        	<form id="logoutForm" th:action="@{/logout}" method="post" style="display: none"></form>
+			        <script type="text/javascript">
+			        	$(document).ready(function() {
+			    			$("#logoutAction").click(function() {
+			    				$("#logoutForm").submit();
+			    			});
+			        	});
+			        </script>
+	        	</th:block>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+</html>
